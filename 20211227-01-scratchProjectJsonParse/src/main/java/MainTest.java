@@ -1,14 +1,13 @@
 import com.alibaba.fastjson.JSON;
 import pojo.Operation;
 import pojo.json.ProjectJson;
-import pojo.json.Target;
-import pojo.json.target.Block;
 import util.Analysis;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 public class MainTest
 {
@@ -22,18 +21,18 @@ public class MainTest
         {
             InputStream fis = new FileInputStream(file);
             json = new String(fis.readAllBytes());
-
+            fis.close();
             projectJson = JSON.parseObject(json, ProjectJson.class);
 
-            Target[] targets = projectJson.getTargets();
-            Target target = targets[1];
-            Operation[] operations = Analysis.rebuildTarget(target);
-            for(Operation o : operations)
-            {
-                System.out.println(o + " - " + o.getOpcodeType());
-            }
+            Operation[][] totalOperations = Analysis
+                    .rebuildTargets(projectJson.getTargets());
 
-            fis.close();
+            int[] stackCounter = new int[2];
+            for(Operation[] list : totalOperations)
+            {
+                Analysis.traverseOperations(list, stackCounter);
+            }
+            System.out.println(Arrays.toString(stackCounter));
         }
         catch(Exception e)
         {
