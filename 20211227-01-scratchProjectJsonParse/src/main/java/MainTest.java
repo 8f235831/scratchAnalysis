@@ -26,6 +26,12 @@ public class MainTest
             projectJson = JSON.parseObject(json, ProjectJson.class);
 
             Target[] targets = projectJson.getTargets();
+            Target target = targets[1];
+            Operation[] operations = Analysis.rebuildTarget(target);
+            for(Operation o : operations)
+            {
+                System.out.println(o + " - " + o.getOpcodeType());
+            }
 
             fis.close();
         }

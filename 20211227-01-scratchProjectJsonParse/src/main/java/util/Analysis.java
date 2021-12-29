@@ -1,5 +1,6 @@
 package util;
 
+import pojo.AnalysisResults;
 import pojo.json.*;
 import pojo.json.target.*;
 import pojo.Operation;
@@ -8,9 +9,21 @@ import java.util.*;
 
 public class Analysis
 {
+
+
+
+
     private Analysis()
     {
 
+    }
+
+    public static AnalysisResults analyse(String source)
+    {
+
+
+        // TODO 需要在此实现具体的分析函数。
+        return null;
     }
 
     public static Operation[][] rebuildTargets(Target[] targets)
@@ -95,11 +108,5 @@ public class Analysis
             operation.setReferred(new ArrayList<>(operation.getReferred()));
         }
         return result.values().toArray(new Operation[0]);
-    }
-
-    public static String analyse(String source)
-    {
-        // TODO 需要在此实现具体的分析函数。
-        return null;
     }
 }
