@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Operation
 {
-    public static final int OPCODE_NUMBER = 32;
+    public static final int OPCODE_NUMBER = 34;
     public static final int OPCODE_DEFAULT_ = 0;
     public static final int OPCODE_EVENT_WHENFLAGCLICKED = 1;
     public static final int OPCODE_EVENT_WHENBACKDROPSWITCHESTO = 2;
@@ -41,8 +41,12 @@ public class Operation
     public static final int OPCODE_SENSING_SETDRAGMODE = 27;
     public static final int OPCODE_SENSING_RESETTIMER = 28;
     public static final int OPCODE_OPERATOR_ = 29;
-    public static final int OPCODE_DATA_ = 30;
-    public static final int OPCODE_PROCEDURES_ = 31;
+    // 将variable 和 list 分开
+    public static final int OPCODE_DATA_VARIABLE = 30;
+    public static final int OPCODE_DATA_LIST = 31;
+    public static final int OPCODE_PROCEDURES_ = 32;
+    // 新增
+    public static final int OPCODE_MOTION_ = 33;
 
     @Getter
     @Setter
@@ -77,6 +81,7 @@ public class Operation
         this.block      = block;
         this.refer      = new LinkedList<>();
         this.referred   = new LinkedList<>();
+        // 根据 opcode 来判断其类型
         this.opcodeType = Analysis.judgeOpcode(this.block.getOpcode());
     }
 

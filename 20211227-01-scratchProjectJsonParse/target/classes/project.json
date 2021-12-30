@@ -5,7 +5,7 @@
       "name": "Stage",
       "variables": {
         "`jEk@4|i[#Fk?(8x)AV.-my variable": [
-          "我的变量",
+          "my variable",
           0
         ]
       },
@@ -17,7 +17,7 @@
       "costumes": [
         {
           "assetId": "cd21514d0531fdffb22204e0ec5ed84a",
-          "name": "背景1",
+          "name": "backdrop1",
           "md5ext": "cd21514d0531fdffb22204e0ec5ed84a.svg",
           "dataFormat": "svg",
           "rotationCenterX": 240,
@@ -27,11 +27,11 @@
       "sounds": [
         {
           "assetId": "83a9787d4cb6f3b7632b4ddfebf74367",
-          "name": "啵",
+          "name": "pop",
           "dataFormat": "wav",
           "format": "",
-          "rate": 44100,
-          "sampleCount": 1032,
+          "rate": 48000,
+          "sampleCount": 1123,
           "md5ext": "83a9787d4cb6f3b7632b4ddfebf74367.wav"
         }
       ],
@@ -44,26 +44,26 @@
     },
     {
       "isStage": false,
-      "name": "角色1",
+      "name": "Sprite1",
       "variables": {},
       "lists": {},
       "broadcasts": {},
       "blocks": {
-        "0.VeJP}EFP79)RS1)gr[": {
+        "4{Q7sZ]-HXBZ}V*c6IH-": {
           "opcode": "event_whenflagclicked",
-          "next": "G-:O{Nhl{0uCAwTaC([[",
+          "next": "EVr~LhV~=e-?85IES(@7",
           "parent": null,
           "inputs": {},
           "fields": {},
           "shadow": false,
           "topLevel": true,
-          "x": 98,
-          "y": -32
+          "x": 168,
+          "y": 144
         },
-        "k_KGIaaC,TXzp)JeL6?e": {
+        "EVr~LhV~=e-?85IES(@7": {
           "opcode": "motion_movesteps",
-          "next": null,
-          "parent": "`_KK?9yb{y*lbw:(L|4V",
+          "next": "eDZ2)OirVkFA{bo:[w;r",
+          "parent": "4{Q7sZ]-HXBZ}V*c6IH-",
           "inputs": {
             "STEPS": [
               1,
@@ -77,133 +77,32 @@
           "shadow": false,
           "topLevel": false
         },
-        "oalcBBM]X?e1Ff2DYnH@": {
-          "opcode": "operator_divide",
+        "eDZ2)OirVkFA{bo:[w;r": {
+          "opcode": "control_repeat_until",
+          "next": "d7e=uaJO{^}Dl:U$}!D!",
+          "parent": "EVr~LhV~=e-?85IES(@7",
+          "inputs": {},
+          "fields": {},
+          "shadow": false,
+          "topLevel": false
+        },
+        "d7e=uaJO{^}Dl:U$}!D!": {
+          "opcode": "motion_gotoxy",
           "next": null,
-          "parent": "L#eWFhLD{4p427$(L-yS",
+          "parent": "eDZ2)OirVkFA{bo:[w;r",
           "inputs": {
-            "NUM1": [
-              3,
-              ".KlTH|I|AnEH73yeKV8s",
-              [
-                4,
-                "10"
-              ]
-            ],
-            "NUM2": [
+            "X": [
               1,
               [
                 4,
-                "2"
-              ]
-            ]
-          },
-          "fields": {},
-          "shadow": false,
-          "topLevel": false
-        },
-        "G-:O{Nhl{0uCAwTaC([[": {
-          "opcode": "control_if",
-          "next": null,
-          "parent": "0.VeJP}EFP79)RS1)gr[",
-          "inputs": {
-            "SUBSTACK": [
-              2,
-              "`_KK?9yb{y*lbw:(L|4V"
-            ],
-            "CONDITION": [
-              2,
-              "L#eWFhLD{4p427$(L-yS"
-            ]
-          },
-          "fields": {},
-          "shadow": false,
-          "topLevel": false
-        },
-        "`_KK?9yb{y*lbw:(L|4V": {
-          "opcode": "control_if",
-          "next": null,
-          "parent": "G-:O{Nhl{0uCAwTaC([[",
-          "inputs": {
-            "CONDITION": [
-              2,
-              "4={B{eP8,}~A0IQLp?,D"
-            ],
-            "SUBSTACK": [
-              2,
-              "k_KGIaaC,TXzp)JeL6?e"
-            ]
-          },
-          "fields": {},
-          "shadow": false,
-          "topLevel": false
-        },
-        "L#eWFhLD{4p427$(L-yS": {
-          "opcode": "operator_gt",
-          "next": null,
-          "parent": "G-:O{Nhl{0uCAwTaC([[",
-          "inputs": {
-            "OPERAND1": [
-              3,
-              "oalcBBM]X?e1Ff2DYnH@",
-              [
-                10,
-                ""
+                "0"
               ]
             ],
-            "OPERAND2": [
-              1,
-              [
-                10,
-                "50"
-              ]
-            ]
-          },
-          "fields": {},
-          "shadow": false,
-          "topLevel": false
-        },
-        "4={B{eP8,}~A0IQLp?,D": {
-          "opcode": "operator_contains",
-          "next": null,
-          "parent": "`_KK?9yb{y*lbw:(L|4V",
-          "inputs": {
-            "STRING1": [
-              1,
-              [
-                10,
-                "苹果"
-              ]
-            ],
-            "STRING2": [
-              1,
-              [
-                10,
-                "果"
-              ]
-            ]
-          },
-          "fields": {},
-          "shadow": false,
-          "topLevel": false
-        },
-        ".KlTH|I|AnEH73yeKV8s": {
-          "opcode": "operator_divide",
-          "next": null,
-          "parent": "oalcBBM]X?e1Ff2DYnH@",
-          "inputs": {
-            "NUM1": [
+            "Y": [
               1,
               [
                 4,
                 "10"
-              ]
-            ],
-            "NUM2": [
-              1,
-              [
-                4,
-                "2"
               ]
             ]
           },
@@ -217,7 +116,7 @@
       "costumes": [
         {
           "assetId": "bcf454acf82e4504149f7ffe07081dbc",
-          "name": "造型1",
+          "name": "costume1",
           "bitmapResolution": 1,
           "md5ext": "bcf454acf82e4504149f7ffe07081dbc.svg",
           "dataFormat": "svg",
@@ -226,7 +125,7 @@
         },
         {
           "assetId": "0fb9be3e8397c983338cb71dc84d0b25",
-          "name": "造型2",
+          "name": "costume2",
           "bitmapResolution": 1,
           "md5ext": "0fb9be3e8397c983338cb71dc84d0b25.svg",
           "dataFormat": "svg",
@@ -237,11 +136,11 @@
       "sounds": [
         {
           "assetId": "83c36d806dc92327b9e7049a565c6bff",
-          "name": "喵",
+          "name": "Meow",
           "dataFormat": "wav",
           "format": "",
-          "rate": 44100,
-          "sampleCount": 37376,
+          "rate": 48000,
+          "sampleCount": 40681,
           "md5ext": "83c36d806dc92327b9e7049a565c6bff.wav"
         }
       ],
@@ -249,14 +148,33 @@
       "layerOrder": 1,
       "visible": true,
       "x": 0,
-      "y": 0,
+      "y": 10,
       "size": 100,
-      "direction": 90,
+      "direction": -127.76248350025759,
       "draggable": false,
       "rotationStyle": "all around"
     }
   ],
-  "monitors": [],
+  "monitors": [
+    {
+      "id": "`jEk@4|i[#Fk?(8x)AV.-my variable",
+      "mode": "large",
+      "opcode": "data_variable",
+      "params": {
+        "VARIABLE": "my variable"
+      },
+      "spriteName": null,
+      "value": 0,
+      "width": 0,
+      "height": 0,
+      "x": 5,
+      "y": 5,
+      "visible": true,
+      "sliderMin": 0,
+      "sliderMax": 100,
+      "isDiscrete": true
+    }
+  ],
   "extensions": [],
   "meta": {
     "semver": "3.0.0",

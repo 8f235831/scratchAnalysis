@@ -6,20 +6,69 @@ import pojo.Operation;
 import pojo.json.*;
 import pojo.json.target.*;
 
+import javax.print.DocFlavor;
 import java.util.*;
+import org.apache.commons.lang3.RandomStringUtils;
 
 public class Analysis
 {
-    private Analysis()
-    {
+    // 得分 1 2 3 和 与之对应的 (opcodetype, 类型)
+    public static Map<Integer, String[]> score1;
+    public static Map<Integer, String[]> score2;
+    public static Map<Integer, String[]> score3;
 
+    public Analysis()
+    {
+        score1 = new HashMap<Integer, String[]>() {{
+          put(0, new String[]{"Flow control"});
+          put(1, new String[]{"User interactivity"});
+          put(18, new String[]{"Synchronization"});
+          put(12, new String[]{"Logic"});
+          put(33, new String[]{"Data representation"});
+        }};
+        score2 = new HashMap<Integer, String[]>() {{
+            put(10, new String[]{"Flow control"});
+            put(11, new String[]{"Flow control"});
+            put(30, new String[]{"Data representation"});
+            put(32, new String[]{"Abstraction"});
+            put(2, new String[]{"User interactivity"});
+            put(3, new String[]{"User interactivity"});
+            put(4, new String[]{"User interactivity"});
+            put(19, new String[]{"User interactivity"});
+            put(20, new String[]{"User interactivity"});
+            put(21, new String[]{"User interactivity"});
+            put(22, new String[]{"User interactivity"});
+            put(23, new String[]{"User interactivity"});
+            put(24, new String[]{"User interactivity"});
+            put(25, new String[]{"User interactivity"});
+            put(26, new String[]{"User interactivity"});
+            put(27, new String[]{"User interactivity"});
+            put(28, new String[]{"User interactivity"});
+            put(6, new String[]{"Synchronization"});
+            put(7, new String[]{"Synchronization"});
+            put(8, new String[]{"Synchronization"});
+            put(13, new String[]{"Logic"});
+        }};
+        score3 = new HashMap<Integer, String[]>() {{
+           put(14, new String[]{"Flow control", "Synchronization"});
+           put(15, new String[]{"Flow control"});
+           put(31, new String[]{"Data representation"});
+           put(17, new String[]{"Abstraction"});
+        }};
     }
 
     public static AnalysisResults analyse(String source)
     {
+        AnalysisResults analysisResults = new AnalysisResults();
+        // 生成 16 位哈希值
+        analysisResults.setSourceHash(RandomStringUtils.random(16, true, true));
+
+        // 解析json
         ProjectJson projectJson = JSON.parseObject(source, ProjectJson.class);
+        // 转换为 operation
         Operation[][] totalOperations = rebuildTargets(
                 projectJson.getTargets());
+        // 统计每种 operation 的数量
         int[] callCounter = new int[Operation.OPCODE_NUMBER];
         int[] stackCounter = new int[2];
         for(Operation[] operations : totalOperations)
@@ -31,9 +80,31 @@ public class Analysis
         }
 
         // TODO 需要在此实现具体的分析函数。
-        return null;
+        for (int i = 0; i < Operation.OPCODE_NUMBER; ++i) {
+            // 如果有此种opcode
+            if (callCounter[i] != 0) {
+                if (score3.containsKey(i)) {
+                    String[] temp = score3.get(i);
+                    for (String opcode : temp) {
+                        analysisResults.setScore(opcode, 3);
+                    }
+                } else if(score2.containsKey(i)) {
+                    String[] temp = score2.get(i);
+                    for (String opcode : temp) {
+                        analysisResults.setScore(opcode, 2);
+                    }
+                } else if(score1.containsKey(i)) {
+                    String[] temp = score1.get(i);
+                    for (String opcode : temp) {
+                        analysisResults.setScore(opcode, 1);
+                    }
+                }
+            }
+        }
+        return analysisResults;
     }
 
+    // 将解析 json 得到的 targets 转换为 Operation 数组
     public static Operation[][] rebuildTargets(Target[] targets)
     {
         LinkedList<Operation[]> resultList = new LinkedList<>();
@@ -46,13 +117,17 @@ public class Analysis
 
     public static Operation[] rebuildTarget(Target target)
     {
+        // "block id" : " {"opcode":, xxx }"
         Map<String, Block> blocks = target.getBlocks();
+
         LinkedList<String[]> parentRelationships = new LinkedList<>();
         LinkedList<String[]> nextRelationships = new LinkedList<>();
         LinkedList<String[]> referRelationships = new LinkedList<>();
+
         for(String id : blocks.keySet())
         {
             Block block = blocks.get(id);
+            // 记录 block 的 "next" "parent"信息
             if(block.getParent() != null)
             {
                 parentRelationships.add(new String[]{id, block.getParent()});
@@ -61,6 +136,8 @@ public class Analysis
             {
                 nextRelationships.add(new String[]{id, block.getNext()});
             }
+
+            // inputs 跳转
             Map<String, Object[]> inputs = block.getInputs();
             LinkedList<String> referred = new LinkedList<>();
             for(String paramName : inputs.keySet())
@@ -78,8 +155,9 @@ public class Analysis
                 referred.addFirst(id);
                 referRelationships.add(referred.toArray(new String[0]));
             }
-
         }
+
+
         Map<String, Operation> result = new HashMap<>();
         for(String id : blocks.keySet())
         {
@@ -118,6 +196,7 @@ public class Analysis
         return result.values().toArray(new Operation[0]);
     }
 
+    // 判断opcode类型
     public static int judgeOpcode(String opcode)
     {
         if(opcode.contains("event_"))
@@ -172,13 +251,19 @@ public class Analysis
         {
             return Operation.OPCODE_OPERATOR_;
         }
-        else if(opcode.contains("data_"))
+        else if(opcode.contains("data_") && opcode.contains("varible"))
         {
-            return Operation.OPCODE_DATA_;
+            return Operation.OPCODE_DATA_VARIABLE;
+        }
+        else if(opcode.contains("data") && opcode.contains("list")) {
+            return Operation.OPCODE_DATA_LIST;
         }
         else if(opcode.contains("procedures_"))
         {
             return Operation.OPCODE_PROCEDURES_;
+        }
+        else if(opcode.contains("motion_")) {
+            return Operation.OPCODE_MOTION_;
         }
         else
         {
