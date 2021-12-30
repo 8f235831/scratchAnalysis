@@ -16,7 +16,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 @RestController
@@ -33,40 +32,33 @@ public class JsonResponseController
         {
             if(file == null)
             {
-                System.err.println("p-1");
                 response.sendError(400, "Bad Request");
                 return "Failed to upload file.";
             }
             try(InputStream inputStream = file.getInputStream())
             {
-                System.err.println("p-2");
                 content = inputStream.readAllBytes();
                 ZipInputStream zipInputStream = new ZipInputStream(
                         new ByteArrayInputStream(content));
                 while(true)
                 {
-                    System.err.println("p-3");
                     ZipEntry zipEntry = zipInputStream.getNextEntry();
                     if(zipEntry == null)
                     {
-                        System.err.println("p-4");
                         response.sendError(400, "Bad Request");
                         return "Failed to parse file.";
                     }
                     if(!zipEntry.isDirectory() &&
                        zipEntry.getName().equals("project.json"))
                     {
-                        System.err.println("p-5");
-                        if(zipEntry.getSize() >= 10000)
+                        if(zipEntry.getSize() >= 100000)
                         {
-                            System.err.println("p-6");
                             response.sendError(413, "Request Entity Too Large");
                             return "Source code is too large to unzip.";
                         }
                         else
                         {
-                            System.err.println("p-7");
-                            //unzip file
+                            //unzip d
                             content = zipInputStream.readAllBytes();
                             return JSON.toJSONString(
                                     Analysis.analyse(new String(content)));
@@ -86,14 +78,13 @@ public class JsonResponseController
 @Configuration
 class JsonResponseControllerConfig
 {
-
-    // 配置文件上传大小
+    // 设置文件上传限制小于15MB。
     @Bean
     public MultipartConfigElement multipartConfigElement()
     {
         MultipartConfigFactory factory = new MultipartConfigFactory();
-        factory.setMaxFileSize(DataSize.parse("15000KB"));
-        factory.setMaxRequestSize(DataSize.parse("15000KB"));
+        factory.setMaxFileSize(DataSize.parse("100MB"));
+        factory.setMaxRequestSize(DataSize.parse("100MB"));
         return factory.createMultipartConfig();
     }
 }
