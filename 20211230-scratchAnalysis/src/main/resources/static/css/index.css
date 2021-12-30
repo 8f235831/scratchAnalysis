@@ -1,0 +1,35 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+html,body{
+
+}
+.page-header{
+    text-align: center;
+}
+.box{
+    width: 1200px;
+    height: 500px;
+    border: 1px solid #eee;
+    margin: 50px auto 0;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+.boxLeft{
+    flex: 1;
+}
+.boxRight{
+    flex: 2;
+    
+}
+.panel{
+    width: 80%;
+    margin: auto;
+}
+
+.progress{
+    margin-bottom: 0;
+}
