@@ -22,7 +22,7 @@ public class Analysis
         score1 = new HashMap<Integer, String[]>()
         {{
             put(0, new String[]{"Flow control"});
-            put(1, new String[]{"User interactivity"});
+            put(1, new String[]{"User interactivity", "Flow control"});
             put(18, new String[]{"Synchronization"});
             put(12, new String[]{"Logic"});
             put(33, new String[]{"Data representation"});
@@ -76,6 +76,16 @@ public class Analysis
         int[] stackCounter = new int[2];
         for(Operation[] operations : totalOperations)
         {
+            int[] stackCounter = new int[2];
+            // 判断嵌套逻辑表达式层数
+            traverseOperations(operations, stackCounter);
+            if (stackCounter[0] >= 3) {
+                analysisResults.changeScore("Logic", 3);
+            } else if (stackCounter[0] == 2) {
+                analysisResults.changeScore("Logic", 2);
+            } else if (stackCounter[0] == 1) {
+                analysisResults.changeScore("Logic", 1);
+            }
             for(Operation operation : operations)
             {
                 callCounter[operation.getOpcodeType()]++;

@@ -34,7 +34,7 @@ public class AnalysisResults
     {
         for(int i = 0; i < results.size(); ++i)
         {
-            if(results.get(i).getName().equals(opcode))
+            if(results.get(i).getName().equals(opcode) && score > results.get(i).getScore())
             {
                 results.get(i).setScore(score);
             }
