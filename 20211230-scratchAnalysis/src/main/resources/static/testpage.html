@@ -1,36 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>文件上传页面</title>
 </head>
 <body>
 <h1>文件上传页面</h1>
-<input id="file" type="file"/>
-<hr/>
-<button id="upload" name="_upload" class="btn btn-primary standard-button">提交</button>
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $("#upload").click(function () {
-            var formData = new FormData();
-            formData.append('file-data', $('#file')[0].files[0]);
-            $.ajax({
-                url: '/sourceSubmit',
-                type: 'POST',
-                cache: false,
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (result) {
-                    alert(result);
-                },
-                error: function (xhr) {
-                    alert("错误提示： " + xhr.status + " " + xhr.statusText);
-                }
-            });
-        });
-    });
-</script>
+<form method="post" action="/sourceSubmit" enctype="multipart/form-data">
+    选择要上传的文件：<input type="file" name="file-data"><br>
+    <hr>
+    <input type="submit" value="提交">
+</form>
 </body>
 </html>
