@@ -49,27 +49,49 @@
       "lists": {},
       "broadcasts": {},
       "blocks": {
-        "4{Q7sZ]-HXBZ}V*c6IH-": {
+        "ihgmt`huJu!qg2rH#_y8": {
           "opcode": "event_whenflagclicked",
-          "next": "EVr~LhV~=e-?85IES(@7",
+          "next": "J;if]ZktQ$8g9{Io6dTk",
           "parent": null,
           "inputs": {},
           "fields": {},
           "shadow": false,
           "topLevel": true,
-          "x": 168,
-          "y": 144
+          "x": 209,
+          "y": 83
         },
-        "EVr~LhV~=e-?85IES(@7": {
-          "opcode": "motion_movesteps",
-          "next": "eDZ2)OirVkFA{bo:[w;r",
-          "parent": "4{Q7sZ]-HXBZ}V*c6IH-",
+        "J;if]ZktQ$8g9{Io6dTk": {
+          "opcode": "control_if",
+          "next": null,
+          "parent": "ihgmt`huJu!qg2rH#_y8",
           "inputs": {
-            "STEPS": [
+            "CONDITION": [
+              2,
+              "wANIMF1DhF*p{.VA/)4R"
+            ]
+          },
+          "fields": {},
+          "shadow": false,
+          "topLevel": false
+        },
+        "9Oeh)O3N9{u$(aGOq7xY": {
+          "opcode": "operator_gt",
+          "next": null,
+          "parent": "wANIMF1DhF*p{.VA/)4R",
+          "inputs": {
+            "OPERAND1": [
+              3,
+              "{*hKFEzcyB5S~x,*3r@S",
+              [
+                10,
+                ""
+              ]
+            ],
+            "OPERAND2": [
               1,
               [
-                4,
-                "10"
+                10,
+                "50"
               ]
             ]
           },
@@ -77,32 +99,48 @@
           "shadow": false,
           "topLevel": false
         },
-        "eDZ2)OirVkFA{bo:[w;r": {
-          "opcode": "control_repeat_until",
-          "next": "d7e=uaJO{^}Dl:U$}!D!",
-          "parent": "EVr~LhV~=e-?85IES(@7",
-          "inputs": {},
+        "{*hKFEzcyB5S~x,*3r@S": {
+          "opcode": "operator_add",
+          "next": null,
+          "parent": "9Oeh)O3N9{u$(aGOq7xY",
+          "inputs": {
+            "NUM1": [
+              1,
+              [
+                4,
+                "20"
+              ]
+            ],
+            "NUM2": [
+              1,
+              [
+                4,
+                "30"
+              ]
+            ]
+          },
           "fields": {},
           "shadow": false,
           "topLevel": false
         },
-        "d7e=uaJO{^}Dl:U$}!D!": {
-          "opcode": "motion_gotoxy",
+        "wANIMF1DhF*p{.VA/)4R": {
+          "opcode": "operator_gt",
           "next": null,
-          "parent": "eDZ2)OirVkFA{bo:[w;r",
+          "parent": "J;if]ZktQ$8g9{Io6dTk",
           "inputs": {
-            "X": [
-              1,
+            "OPERAND1": [
+              3,
+              "9Oeh)O3N9{u$(aGOq7xY",
               [
-                4,
-                "0"
+                10,
+                ""
               ]
             ],
-            "Y": [
+            "OPERAND2": [
               1,
               [
-                4,
-                "10"
+                10,
+                "50"
               ]
             ]
           },
@@ -148,33 +186,14 @@
       "layerOrder": 1,
       "visible": true,
       "x": 0,
-      "y": 10,
+      "y": 0,
       "size": 100,
-      "direction": -127.76248350025759,
+      "direction": 90,
       "draggable": false,
       "rotationStyle": "all around"
     }
   ],
-  "monitors": [
-    {
-      "id": "`jEk@4|i[#Fk?(8x)AV.-my variable",
-      "mode": "large",
-      "opcode": "data_variable",
-      "params": {
-        "VARIABLE": "my variable"
-      },
-      "spriteName": null,
-      "value": 0,
-      "width": 0,
-      "height": 0,
-      "x": 5,
-      "y": 5,
-      "visible": true,
-      "sliderMin": 0,
-      "sliderMax": 100,
-      "isDiscrete": true
-    }
-  ],
+  "monitors": [],
   "extensions": [],
   "meta": {
     "semver": "3.0.0",

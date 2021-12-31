@@ -3,6 +3,7 @@ package pojo;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Getter;
 import lombok.Setter;
+import util.Analysis;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -28,12 +29,19 @@ public class AnalysisResults
        add(new Result("Logic", 0, 3));
     }};
 
+
     // 设置 opcode 的分数
-    public void setScore(String opcode, int score) {
+    public void changeScore(String opcode, int score) {
         for (int i = 0; i < results.size(); ++i) {
-            if (results.get(i).getName().equals(opcode)) {
+            if (results.get(i).getName().equals(opcode) && score > results.get(i).getScore()) {
                 results.get(i).setScore(score);
             }
+        }
+    }
+
+    public void pros() {
+        for (int i = 0; i < results.size(); ++i) {
+            System.out.println(results.get(i).getScore());
         }
     }
 }

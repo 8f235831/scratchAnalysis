@@ -13,48 +13,45 @@ import org.apache.commons.lang3.RandomStringUtils;
 public class Analysis
 {
     // 得分 1 2 3 和 与之对应的 (opcodetype, 类型)
-    public static Map<Integer, String[]> score1;
-    public static Map<Integer, String[]> score2;
-    public static Map<Integer, String[]> score3;
+    public static Map<Integer, String[]> score1 = new HashMap<Integer, String[]>() {{
+        put(0, new String[]{"Flow control"});
+        put(1, new String[]{"User interactivity", "Flow control"});
+        put(18, new String[]{"Synchronization"});
+        put(12, new String[]{"Logic"});
+        put(33, new String[]{"Data representation"});
+    }};
+    public static Map<Integer, String[]> score2 = new HashMap<Integer, String[]>() {{
+        put(10, new String[]{"Flow control"});
+        put(11, new String[]{"Flow control"});
+        put(30, new String[]{"Data representation"});
+        put(32, new String[]{"Abstraction"});
+        put(2, new String[]{"User interactivity"});
+        put(3, new String[]{"User interactivity"});
+        put(4, new String[]{"User interactivity"});
+        put(19, new String[]{"User interactivity"});
+        put(20, new String[]{"User interactivity"});
+        put(21, new String[]{"User interactivity"});
+        put(22, new String[]{"User interactivity"});
+        put(23, new String[]{"User interactivity"});
+        put(24, new String[]{"User interactivity"});
+        put(25, new String[]{"User interactivity"});
+        put(26, new String[]{"User interactivity"});
+        put(27, new String[]{"User interactivity"});
+        put(28, new String[]{"User interactivity"});
+        put(6, new String[]{"Synchronization"});
+        put(7, new String[]{"Synchronization"});
+        put(8, new String[]{"Synchronization"});
+        put(13, new String[]{"Logic"});
+    }};
+    public static Map<Integer, String[]> score3 = new HashMap<Integer, String[]>() {{
+        put(14, new String[]{"Flow control", "Synchronization"});
+        put(15, new String[]{"Flow control"});
+        put(31, new String[]{"Data representation"});
+        put(17, new String[]{"Abstraction"});
+    }};
 
     public Analysis()
     {
-        score1 = new HashMap<Integer, String[]>() {{
-          put(0, new String[]{"Flow control"});
-          put(1, new String[]{"User interactivity"});
-          put(18, new String[]{"Synchronization"});
-          put(12, new String[]{"Logic"});
-          put(33, new String[]{"Data representation"});
-        }};
-        score2 = new HashMap<Integer, String[]>() {{
-            put(10, new String[]{"Flow control"});
-            put(11, new String[]{"Flow control"});
-            put(30, new String[]{"Data representation"});
-            put(32, new String[]{"Abstraction"});
-            put(2, new String[]{"User interactivity"});
-            put(3, new String[]{"User interactivity"});
-            put(4, new String[]{"User interactivity"});
-            put(19, new String[]{"User interactivity"});
-            put(20, new String[]{"User interactivity"});
-            put(21, new String[]{"User interactivity"});
-            put(22, new String[]{"User interactivity"});
-            put(23, new String[]{"User interactivity"});
-            put(24, new String[]{"User interactivity"});
-            put(25, new String[]{"User interactivity"});
-            put(26, new String[]{"User interactivity"});
-            put(27, new String[]{"User interactivity"});
-            put(28, new String[]{"User interactivity"});
-            put(6, new String[]{"Synchronization"});
-            put(7, new String[]{"Synchronization"});
-            put(8, new String[]{"Synchronization"});
-            put(13, new String[]{"Logic"});
-        }};
-        score3 = new HashMap<Integer, String[]>() {{
-           put(14, new String[]{"Flow control", "Synchronization"});
-           put(15, new String[]{"Flow control"});
-           put(31, new String[]{"Data representation"});
-           put(17, new String[]{"Abstraction"});
-        }};
     }
 
     public static AnalysisResults analyse(String source)
@@ -70,13 +67,23 @@ public class Analysis
                 projectJson.getTargets());
         // 统计每种 operation 的数量
         int[] callCounter = new int[Operation.OPCODE_NUMBER];
-        int[] stackCounter = new int[2];
         for(Operation[] operations : totalOperations)
         {
+            int[] stackCounter = new int[2];
+            // 判断嵌套逻辑表达式层数
+            traverseOperations(operations, stackCounter);
+            if (stackCounter[0] >= 3) {
+                analysisResults.changeScore("Logic", 3);
+            } else if (stackCounter[0] == 2) {
+                analysisResults.changeScore("Logic", 2);
+            } else if (stackCounter[0] == 1) {
+                analysisResults.changeScore("Logic", 1);
+            }
             for(Operation operation : operations)
             {
                 callCounter[operation.getOpcodeType()]++;
             }
+
         }
 
         // TODO 需要在此实现具体的分析函数。
@@ -86,17 +93,17 @@ public class Analysis
                 if (score3.containsKey(i)) {
                     String[] temp = score3.get(i);
                     for (String opcode : temp) {
-                        analysisResults.setScore(opcode, 3);
+                        analysisResults.changeScore(opcode, 3);
                     }
                 } else if(score2.containsKey(i)) {
                     String[] temp = score2.get(i);
                     for (String opcode : temp) {
-                        analysisResults.setScore(opcode, 2);
+                        analysisResults.changeScore(opcode, 2);
                     }
                 } else if(score1.containsKey(i)) {
                     String[] temp = score1.get(i);
                     for (String opcode : temp) {
-                        analysisResults.setScore(opcode, 1);
+                        analysisResults.changeScore(opcode, 1);
                     }
                 }
             }
