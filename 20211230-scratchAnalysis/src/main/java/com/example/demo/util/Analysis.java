@@ -13,9 +13,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 public class Analysis
 {
     // 得分 1 2 3 和 与之对应的 (opcodetype, 类型)
-    public static Map<Integer, String[]> score1;
-    public static Map<Integer, String[]> score2;
-    public static Map<Integer, String[]> score3;
+    private static final Map<Integer, String[]> score1;
+    private static final Map<Integer, String[]> score2;
+    private static final Map<Integer, String[]> score3;
 
     static
     {
@@ -64,7 +64,7 @@ public class Analysis
     {
         AnalysisResults analysisResults = new AnalysisResults();
         // 生成 16 位哈希值
-        analysisResults.setSourceHash(RandomStringUtils.random(16, true, true));
+        //analysisResults.setSourceHash(RandomStringUtils.random(16, true, true));
 
         // 解析json
         ProjectJson projectJson = JSON.parseObject(source, ProjectJson.class);
@@ -73,17 +73,21 @@ public class Analysis
                 projectJson.getTargets());
         // 统计每种 operation 的数量
         int[] callCounter = new int[Operation.OPCODE_NUMBER];
-        int[] stackCounter = new int[2];
         for(Operation[] operations : totalOperations)
         {
             int[] stackCounter = new int[2];
             // 判断嵌套逻辑表达式层数
             traverseOperations(operations, stackCounter);
-            if (stackCounter[0] >= 3) {
+            if(stackCounter[0] >= 3)
+            {
                 analysisResults.changeScore("Logic", 3);
-            } else if (stackCounter[0] == 2) {
+            }
+            else if(stackCounter[0] == 2)
+            {
                 analysisResults.changeScore("Logic", 2);
-            } else if (stackCounter[0] == 1) {
+            }
+            else if(stackCounter[0] == 1)
+            {
                 analysisResults.changeScore("Logic", 1);
             }
             for(Operation operation : operations)
@@ -102,7 +106,7 @@ public class Analysis
                     String[] temp = score3.get(i);
                     for(String opcode : temp)
                     {
-                        analysisResults.setScore(opcode, 3);
+                        analysisResults.changeScore(opcode, 3);
                     }
                 }
                 else if(score2.containsKey(i))
@@ -110,7 +114,7 @@ public class Analysis
                     String[] temp = score2.get(i);
                     for(String opcode : temp)
                     {
-                        analysisResults.setScore(opcode, 2);
+                        analysisResults.changeScore(opcode, 2);
                     }
                 }
                 else if(score1.containsKey(i))
@@ -118,7 +122,7 @@ public class Analysis
                     String[] temp = score1.get(i);
                     for(String opcode : temp)
                     {
-                        analysisResults.setScore(opcode, 1);
+                        analysisResults.changeScore(opcode, 1);
                     }
                 }
             }
@@ -340,7 +344,6 @@ public class Analysis
         for(Operation operation : roots)
         {
 
-            System.out.println("0 - " + operation);
             traverseOperation(operation, stackCounter, false, 0);
         }
     }
@@ -350,13 +353,10 @@ public class Analysis
             int depth
     )
     {
-        System.out.println(
-                "1 - " + operation + " - " + isParentOperator + " - " + depth);
         if(isParentOperator)
         {
             if(operation.getOpcodeType() == Operation.OPCODE_OPERATOR_)
             {
-                System.out.println("2 - " + operation);
                 if(stackCounter[0] < depth + 1)
                 {
                     stackCounter[0] = depth + 1;
@@ -373,7 +373,6 @@ public class Analysis
             }
             else
             {
-                System.out.println("3 - " + operation);
                 for(Operation refer : operation.getRefer())
                 {
                     traverseOperation(refer, stackCounter, false, 0);
@@ -389,7 +388,6 @@ public class Analysis
         {
             if(operation.getOpcodeType() == Operation.OPCODE_OPERATOR_)
             {
-                System.out.println("4 - " + operation);
                 for(Operation refer : operation.getRefer())
                 {
                     traverseOperation(refer, stackCounter, true, 0);
@@ -402,8 +400,6 @@ public class Analysis
             }
             else
             {
-
-                System.out.println("5 - " + operation);
                 if(stackCounter[1] < depth + 1)
                 {
                     stackCounter[1] = depth + 1;
@@ -421,5 +417,5 @@ public class Analysis
         }
     }
 
-
 }
+

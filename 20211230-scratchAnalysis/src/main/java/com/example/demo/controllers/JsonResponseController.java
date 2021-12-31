@@ -18,9 +18,18 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+/**
+ * Controller类。
+ */
 @RestController
 public class JsonResponseController
 {
+    /**
+     * 响应对/sourceSubmit的POST请求，其中file-data项为MultipartFile类型且必需。
+     * 采用在服务器端解压的模式。
+     *
+     * @param file 上传的文件。
+     */
     @RequestMapping(value = "/sourceSubmit", method = RequestMethod.POST)
     public String reply(
             HttpServletResponse response,
@@ -32,33 +41,40 @@ public class JsonResponseController
         {
             if(file == null)
             {
+                // 上传失败，返回400。
                 response.sendError(400, "Bad Request");
                 return "Failed to upload file.";
             }
             try(InputStream inputStream = file.getInputStream())
             {
+                // 按zip格式解压sb3文件。
                 content = inputStream.readAllBytes();
                 ZipInputStream zipInputStream = new ZipInputStream(
                         new ByteArrayInputStream(content));
+                // 首先读取zipEntry。
                 while(true)
                 {
+                    // 寻找project.json文件。
                     ZipEntry zipEntry = zipInputStream.getNextEntry();
                     if(zipEntry == null)
                     {
+                        // 上传的压缩文件不包含project.json文件，返回400。
                         response.sendError(400, "Bad Request");
                         return "Failed to parse file.";
                     }
                     if(!zipEntry.isDirectory() &&
                        zipEntry.getName().equals("project.json"))
                     {
-                        if(zipEntry.getSize() >= 100000)
+                        // 找到project.json后执行如下：
+                        if(zipEntry.getSize() >= 500000)
                         {
+                            // project.json文件大于500kb，返回413。
                             response.sendError(413, "Request Entity Too Large");
                             return "Source code is too large to unzip.";
                         }
                         else
                         {
-                            //unzip d
+                            // 解压zip文件，并返回解析结果。
                             content = zipInputStream.readAllBytes();
                             return JSON.toJSONString(
                                     Analysis.analyse(new String(content)));
@@ -69,6 +85,7 @@ public class JsonResponseController
         }
         catch(IOException e)
         {
+            // 任何错误。
             e.printStackTrace();
             return "failed";
         }
@@ -78,7 +95,9 @@ public class JsonResponseController
 @Configuration
 class JsonResponseControllerConfig
 {
-    // 设置文件上传限制小于15MB。
+    /**
+     * 设置文件上传限制小于15MB。
+     */
     @Bean
     public MultipartConfigElement multipartConfigElement()
     {

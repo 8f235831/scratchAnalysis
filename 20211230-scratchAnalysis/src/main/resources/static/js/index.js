@@ -6,11 +6,11 @@ $(document).ready(function () {
         language: 'zh',
     })
     $("#input-id").on("fileuploaded", function (event, data, previewId, index) {
-     console.log('event = ', event)
+        console.log('event = ', event)
         console.log('data = ', data)
         let rows = data.response.results;
         $(".remove").remove();
-        for(var i = 0; i < rows.length; i++) {
+        for (var i = 0; i < rows.length; i++) {
             var name = rows[i].name;
             var max_score = rows[i].max_score;
             var score = rows[i].score;
@@ -19,22 +19,22 @@ $(document).ready(function () {
             html.find(".td1").text(name)
             html.find(".score").text(score)
             html.find(".max_score").text(max_score)
-            if(score == 0){
+            if (score == 0) {
                 html.find(".progress-bar0").show();
             }
-            if(score == 1){
+            if (score == 1) {
                 html.find(".progress-bar1").show();
             }
-            if(score == 2){
+            if (score == 2) {
                 html.find(".progress-bar-warning").show();
             }
-            if(score == 3){
+            if (score == 3) {
                 html.find(".progress-bar-success").show();
             }
 
             $("#tb1").append(html);
         }
-
-
+    }).on('filebatchuploaderror', function (event, data, msg) {
+        window.alert("上传或解析失败，请检查上传的文件格式及大小。");
     })
 });

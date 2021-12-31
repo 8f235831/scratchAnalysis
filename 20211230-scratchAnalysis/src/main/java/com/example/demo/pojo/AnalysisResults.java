@@ -30,11 +30,12 @@ public class AnalysisResults
     }};
 
     // 设置 opcode 的分数
-    public void setScore(String opcode, int score)
+    public void changeScore(String opcode, int score)
     {
         for(int i = 0; i < results.size(); ++i)
         {
-            if(results.get(i).getName().equals(opcode) && score > results.get(i).getScore())
+            if(results.get(i).getName().equals(opcode) &&
+               score > results.get(i).getScore())
             {
                 results.get(i).setScore(score);
             }
@@ -42,47 +43,3 @@ public class AnalysisResults
     }
 }
 
-class Result
-{
-    // 对应七种类型flow control、 data representation abstraction、 user interactivity、
-    // synchronization、 parallelism、 logic
-    @Getter
-    @Setter
-    @JSONField(name = "name", deserialize = false)
-    private String name;
-
-    @Getter
-    @Setter
-    @JSONField(name = "score", deserialize = false)
-    private int score;
-
-    @Getter
-    @Setter
-    @JSONField(name = "max_score", deserialize = false)
-    private int maxScore;
-
-    @Getter
-    @Setter
-    @JSONField(name = "comments", deserialize = false)
-    private Comments comments;
-
-    public Result(String name, int score, int maxScore)
-    {
-        this.name     = name;
-        this.score    = score;
-        this.maxScore = maxScore;
-    }
-}
-
-class Comments
-{
-    @Getter
-    @Setter
-    @JSONField(name = "used", deserialize = false)
-    private String[] used;
-
-    @Getter
-    @Setter
-    @JSONField(name = "count", deserialize = false)
-    private int[] count;
-}
